@@ -1,0 +1,29 @@
+import socket
+import random
+import threading
+
+quo = ["The way to get started is to quit talking and begin doing",
+          "There is nothing impossible to they who will try",
+          "Don’t let yesterday take up too much of today"]
+
+def handle_client(csk):
+    quote = random.choice(quo)
+    csk.send(quote.encode())
+    csk.close()
+
+def main():
+    ssk = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    ssk.bind(('', 8888))
+    ssk.listen(5)
+
+    print("QOTD Server is listening for incoming connections...")
+
+    while True:
+        csk, addr = ssk.accept()
+        print(f"Connected from {addr}")
+        client_handler = threading.Thread(target=handle_client, args=(csk,))
+        client_handler.start()
+
+if __name__ == '__main__':
+    main()
+
