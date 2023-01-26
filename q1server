@@ -1,0 +1,68 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <unistd.h>
+
+int main()
+{
+        int ssk, csk, s, ran_num;
+        struct sockaddr_in server_address, cli_add;
+        int client_address_len = sizeof(cli_add);
+
+
+        ssk = socket(AF_INET, SOCK_STREAM, 0);
+        if (ssk == -1)
+        {
+                printf("Could not create socket");
+        }
+        puts("Socket successfully  created");
+
+
+
+        server_address.sin_family = AF_INET;
+        server_address.sin_port = htons(8080);
+        server_address.sin_addr.s_addr = INADDR_ANY;
+
+
+
+        if (bind(ssk, (struct sockaddr *) &server_address, sizeof(server_address))<0)
+        {
+                perror("bind failed. Error");
+                return 1;
+        }
+        puts("Socket successfully  binded");
+
+        listen(ssk, 5);
+
+        puts("Waiting for incoming connections...");
+
+        s = sizeof(struct sockaddr_in);
+
+if (csk < 0)
+        {
+                perror("server accept failed");
+                return 1;
+        }
+        puts("Connection accepted");
+
+
+        while (1) {
+        csk = accept(ssk, (struct sockaddr *) &cli_add,
+        &client_address_len);
+
+        srand(time(0));
+        ran_num = rand() % 900 + 100;
+
+        send(csk, &ran_num, sizeof(ran_num), 0);
+
+        close(csk);
+
+        }
+        close(ssk);
+
+
+        return 0;
+}
