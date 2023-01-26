@@ -1,0 +1,15 @@
+import socket
+
+def main():
+    csk = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    csk.connect(('192.168.100.154', 8888))
+
+    quote = csk.recv(1024).decode()
+    print(f"QOTD: {quote}")
+
+    csk.close()
+
+if __name__ == '__main__':
+    main()
+
+
