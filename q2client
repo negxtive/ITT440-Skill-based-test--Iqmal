@@ -1,0 +1,16 @@
+import socket
+
+def main():
+    csk = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    csk.connect(('192.168.100.154', 8080))
+
+    fahrenheit = float(input("Enter temperature in Fahrenheit: "))
+    csk.send(str(fahrenheit).encode())
+
+    cels = csk.recv(1024).decode()
+    print(f"Temperature in Celsius: {cels}")
+
+    csk.close()
+
+if __name__ == '__main__':
+    main()
